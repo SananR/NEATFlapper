@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/NEATFlapper.iml" filepath="$PROJECT_DIR$/.idea/NEATFlapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../PythonNEAT/.idea/PythonNEAT.iml" filepath="$PROJECT_DIR$/../PythonNEAT/.idea/PythonNEAT.iml" />
     </modules>
   </component>
 </project>

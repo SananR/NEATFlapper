@@ -1,5 +1,5 @@
 import pygame, random
-from utils import Resources
+from neatflapper.utils import Resources
 
 
 class Pipe:

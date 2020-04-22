@@ -22,11 +22,19 @@ PIPES = []
 def draw_window(window, base):
     window.blit(Resources.BG_IMG, (0, 0))
     for bird in BIRDS:
+        render_lines(bird, window)
         bird.draw(window)
     for pipe in PIPES:
         pipe.draw(window)
+
     base.draw(window)
     pygame.display.update()
+
+
+def render_lines(bird, window):
+    bird_mid = Resources.get_bird_mid(bird)
+    pygame.draw.lines(window, (255, 0, 0), False, [bird_mid, Resources.get_pipe_top_mid(bird.next_pipe)], 3)
+    pygame.draw.lines(window, (255, 0, 0), False, [bird_mid, Resources.get_pipe_bottom_mid(bird.next_pipe)], 3)
 
 
 def handle_pipes():
@@ -34,14 +42,15 @@ def handle_pipes():
         pipe.move()
         if pipe.x + Resources.PIPE_IMG.get_width() < 0:
             PIPES.remove(pipe)
-        if not pipe.passed and pipe.x < BIRD_START_X:
+        if not pipe.passed and pipe.x + Resources.PIPE_IMG.get_width() < BIRD_START_X:
             pipe.passed = True
             PIPES.append(Pipe(PIPES[len(PIPES) - 1].x + PIPE_GAP))
 
 
 def handle_birds():
     for bird in BIRDS:
-        bird.act()
+        bird.act(PIPES)
+
         bird.move()
         if PIPES[0].collide(bird):
             BIRDS.remove(bird)
@@ -49,13 +58,14 @@ def handle_birds():
             BIRDS.remove(bird)
 
 
-def main():
-    for x in range(50):
-        bird = Bird(BIRD_START_X, BIRD_START_Y)
-        BIRDS.append(bird)
-
+def game_loop():
     PIPES.append(Pipe(PIPE_START_GAP))
     PIPES.append(Pipe(PIPE_START_GAP + PIPE_GAP))
+
+    for x in range(1000):
+        bird = Bird(BIRD_START_X, BIRD_START_Y)
+        bird.next_pipe = PIPES[0]
+        BIRDS.append(bird)
 
     base = Base(BASE_HEIGHT)
     window = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
@@ -67,12 +77,12 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-        handle_birds()
         handle_pipes()
+        handle_birds()
 
         base.move()
         draw_window(window, base)
     pygame.quit()
 
 
-main()
+game_loop()
