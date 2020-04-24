@@ -62,7 +62,7 @@ def game_loop():
     PIPES.append(Pipe(PIPE_START_GAP))
     PIPES.append(Pipe(PIPE_START_GAP + PIPE_GAP))
 
-    for x in range(100):
+    for x in range(5000):
         bird = Bird(BIRD_START_X, BIRD_START_Y)
         bird.next_pipe = PIPES[0]
         BIRDS.append(bird)
