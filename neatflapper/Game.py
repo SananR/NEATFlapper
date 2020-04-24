@@ -62,7 +62,7 @@ def game_loop():
     PIPES.append(Pipe(PIPE_START_GAP))
     PIPES.append(Pipe(PIPE_START_GAP + PIPE_GAP))
 
-    for x in range(1000):
+    for x in range(100):
         bird = Bird(BIRD_START_X, BIRD_START_Y)
         bird.next_pipe = PIPES[0]
         BIRDS.append(bird)
@@ -72,7 +72,7 @@ def game_loop():
     clock = pygame.time.Clock()
     running = True
     while running:
-        clock.tick(30)
+        clock.tick(120)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
