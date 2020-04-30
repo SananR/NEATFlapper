@@ -26,7 +26,7 @@ class Bird:
     ROT_VEL = 20
     ANIMATION_TIME = 5
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, network):
         self.x = x
         self.y = y
         self.tilt = 0
@@ -35,25 +35,24 @@ class Bird:
         self.height = self.y
         self.img_count = 0
         self.img = self.IMGS[0]
-        self.network = FeedForwardNetwork(6)
-        self.network.layer(3, act_func=Activations.tanh)
-        self.network.layer(1)
+        self.network = network
         self.score = 0
         self.next_pipe = None
+        self.alive = True
 
     def act(self, pipes):
         self.next_pipe = pipes[0]
         if self.next_pipe.passed:
             self.next_pipe = pipes[1]
 
-        out = self.network.forward_propagate(np.array([Resources.get_bird_mid(self)[0],
-                                                       Resources.get_bird_mid(self)[1],
-                                                       Resources.get_pipe_top_mid(self.next_pipe)[0],
-                                                       Resources.get_pipe_top_mid(self.next_pipe)[1],
-                                                       Resources.get_pipe_bottom_mid(self.next_pipe)[0],
-                                                       Resources.get_pipe_bottom_mid(self.next_pipe)[1]]))
-
-        if out[0] >= 0.5:
+        self.network.activate([Resources.get_bird_mid(self)[0],
+                               Resources.get_bird_mid(self)[1],
+                               Resources.get_pipe_top_mid(self.next_pipe)[0],
+                               Resources.get_pipe_top_mid(self.next_pipe)[1],
+                               Resources.get_pipe_bottom_mid(self.next_pipe)[0],
+                               Resources.get_pipe_bottom_mid(self.next_pipe)[1]])
+        out = self.network.neurons[1][0].value
+        if out >= 0.5:
             self.vel = -10.5
             self.tick_count = 0
             self.height = self.y
